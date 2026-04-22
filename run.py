@@ -9,10 +9,10 @@ CLI:
     python -m metquest.run --sbml DIR --seeds cpd:C00031 --targets cpd:C00041 --beta 15
 """
 import argparse, time
-from .parser              import parse_sbml
-from .guided_bfs          import guided_bfs
-from .dynamic_programming import enumerate_pathways
-from .output              import get_pathway_list, write_csv
+from parser              import parse_sbml
+from guided_bfs          import guided_bfs
+from dynamic_programming import enumerate_pathways
+from output              import get_pathway_list, write_csv
 
 try:
     from .output import get_nx_subgraphs

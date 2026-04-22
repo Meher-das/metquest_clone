@@ -1,5 +1,5 @@
 import cobra
-from .run import run as mq_run
+from run import run as mq_run
 
 def main():
     # 1. SETUP FILENAME AND MODEL ID
@@ -11,9 +11,19 @@ def main():
     # Your parser treats exchange reactions as unprefixed.
     # So we provide the IDs exactly as they appear in the <listOfReactions>
     # for the exchange reactions.
+    # seeds = {
+    #     "glc__D_e", "ala__L_e", "arg__L_e", "asn__L_e", 
+    #     "fe2_e", "pi_e", "h2o_e", "nh4_e"
+    # } # Initial seed set: glucose, 4 amino acids, iron, phosphate, water, ammonium.
+
+    # Updated Seeds to ensure a functional Baseline
+
     seeds = {
-        "glc__D_e", "ala__L_e", "arg__L_e", "asn__L_e", 
-        "fe2_e", "pi_e", "h2o_e", "nh4_e"
+    "glc__D_e", "ala__L_e", "arg__L_e", "asn__L_e", "asp__L_e",
+    "fe2_e", "pi_e", "h2o_e", "nh4_e", "so4_e", "k_e", "mg2_e", 
+    "o2_e", "co2_e",
+    # Add these if Phase 1 still fails:
+    # "atp_c", "adp_c", "nad_c", "nadh_c" 
     }
 
     # 3. TARGET GENERATION (The "Prefixed Internals")
@@ -30,10 +40,12 @@ def main():
         sbml_paths=[sbml_path], 
         seed_set=seeds, 
         targets=targets, 
-        beta=15
+        beta=5
     )
 
     # 5. KEYSTONE IDENTIFICATION (The "What if" analysis)
     # To identify a keystone, you would theoretically remove a reaction 
     # from the 'graph' returned in results and re-run guided_bfs.
     print(f"Reachable nodes in this context: {len(results['scope'])}")
+
+main()
