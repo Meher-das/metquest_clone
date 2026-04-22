@@ -1,62 +1,39 @@
 import cobra
-import os
-from metquest_clone.run import run as mq_run
-
-def get_serum_context(sbml_path):
-    """
-    Automates seed and target identification using cobrapy.
-    """
-    model = cobra.io.read_sbml_model(sbml_path)
-    
-    # 1. SEEDS: Human Serum Environment (Barra et al. 2020)
-    # We exclude B1/B6 here to force the bacteria to use its own pathways
-    serum_bases = ["glc__D", "ala__L", "arg__L", "asn__L", "asp__L", 
-                   "fe2", "pi", "h2o", "co2", "o2", "nh4"]
-    
-    seeds = []
-    for s in serum_bases:
-        try:
-            seeds.append(model.metabolites.get_by_id(f"{s}_e").id)
-        except:
-            pass # Skip if specific ion/nutrient isn't in this strain
-            
-    # 2. TARGETS: The vitamins we want to check reachability for
-    # B1 (Thiamine Diphosphate) and B6 (Pyridoxal 5'-phosphate)
-    potential_targets = ["thmpp_c", "pdx5p_c"] 
-    targets = [m.id for m in model.metabolites if m.id in potential_targets]
-    
-    return set(seeds), targets
+from .run import run as mq_run
 
 def main():
-    sbml_file = "models/iYS854.xml" # S. aureus USA300
-    
-    if not os.path.exists(sbml_file):
-        print(f"File {sbml_file} not found!")
-        return
+    # 1. SETUP FILENAME AND MODEL ID
+    # Your parser uses the filename or the internal SBML ID for prefixing
+    sbml_path = "models/iYS854.xml"
+    model_id = "iYS854" 
 
-    # Phase 1: Automated ID Discovery
-    print(f"[Automation] Mapping IDs for {sbml_file}...")
-    seeds, targets = get_serum_context(sbml_file)
-    
-    print(f"[Automation] Seeds Found: {len(seeds)}")
-    print(f"[Automation] Targets Identified: {targets}")
+    # 2. SEED GENERATION (The "Shared Currency")
+    # Your parser treats exchange reactions as unprefixed.
+    # So we provide the IDs exactly as they appear in the <listOfReactions>
+    # for the exchange reactions.
+    seeds = {
+        "glc__D_e", "ala__L_e", "arg__L_e", "asn__L_e", 
+        "fe2_e", "pi_e", "h2o_e", "nh4_e"
+    }
 
-    # Phase 2: Run your MetQuest Clone
-    # We pass the sbml_file as a list as per your mq_run signature
+    # 3. TARGET GENERATION (The "Prefixed Internals")
+    # Because these are cytoplasmic (_c), your parser will prefix them.
+    # Logic: f"{model_id}::{internal_id}"
+    targets = [
+        f"{model_id}::thmpp_c", # Vitamin B1
+        f"{model_id}::pdx5p_c"  # Vitamin B6
+    ]
+
+    # 4. EXECUTION
+    # This calls your clone's high-level entry point
     results = mq_run(
-        sbml_paths=[sbml_file], 
+        sbml_paths=[sbml_path], 
         seed_set=seeds, 
         targets=targets, 
-        beta=15, 
-        output_csv="eskape_results.csv"
+        beta=15
     )
 
-    # Phase 3: Keystone Evaluation
-    for t in targets:
-        if t not in results['scope']:
-            print(f"!!! CRITICAL: Target {t} is UNREACHABLE in Serum context.")
-        else:
-            print(f"Success: Target {t} is reachable via {len(results['pathways'][t])} paths.")
-
-if __name__ == "__main__":
-    main()
+    # 5. KEYSTONE IDENTIFICATION (The "What if" analysis)
+    # To identify a keystone, you would theoretically remove a reaction 
+    # from the 'graph' returned in results and re-run guided_bfs.
+    print(f"Reachable nodes in this context: {len(results['scope'])}")

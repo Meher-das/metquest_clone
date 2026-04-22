@@ -22,10 +22,10 @@ Model 1 produces X; model 2 consumes X to make Z.
 import os, sys, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from metquest.parser              import parse_sbml
-from metquest.guided_bfs          import guided_bfs
-from metquest.dynamic_programming import enumerate_pathways
-from metquest.output              import write_csv
+from .parser              import parse_sbml
+from .guided_bfs          import guided_bfs
+from .dynamic_programming import enumerate_pathways
+from .output              import write_csv
 
 
 # ── SBML builders ─────────────────────────────────────────────────────────────
