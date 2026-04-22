@@ -7,8 +7,8 @@ Make sure pip is installed on your system by using the command ```sudo apt insta
 Create a virtual environment using the command ```python3 -m venv .venv```.
 
 Source the virtual environment and run pip install to complete environment setup
-```source .venv/bin/activate```
-```pip install requirements.txt```
+```source .venv/bin/activate```,
+```pip install -r requirements.txt```
 
 Citation 
 ========
