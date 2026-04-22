@@ -165,6 +165,7 @@ def parse_sbml(paths):
                      else os.path.splitext(os.path.basename(fp))[0]
 
         _parse_sbml(fp, graph, meta, model_prefix=prefix)
+    # print(meta)
     return graph, meta
 
-# parse_sbml("/home/mandrin/Documents/metquest_clone/models/iYS854.xml")
+# parse_sbml("models/iYS854.xml")
