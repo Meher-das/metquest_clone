@@ -1,5 +1,14 @@
 # Identifying Keystone Reactions in ESKAPE pathogens using MetQuest 
 
+Setup
+=====
+Make sure pip is installed on your system by using the command ```sudo apt install python3-pip```.
+
+Create a virtual environment using the command ```python3 -m venv .venv```.
+
+Source the virtual environment and run pip install to complete environment setup
+```source .venv/bin/activate```
+```pip install .```
 
 Citation 
 ========

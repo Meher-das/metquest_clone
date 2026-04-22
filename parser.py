@@ -166,3 +166,5 @@ def parse_sbml(paths):
 
         _parse_sbml(fp, graph, meta, model_prefix=prefix)
     return graph, meta
+
+parse_sbml("/home/mandrin/Documents/metquest_clone/models/iYS854.xml")
