@@ -8,8 +8,7 @@ Create a virtual environment using the command ```python3 -m venv .venv```.
 
 Source the virtual environment and run pip install to complete environment setup
 ```source .venv/bin/activate```
-```pip install setuptools```
-```pip install .```
+```pip install requirements.txt```
 
 Citation 
 ========
