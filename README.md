@@ -1,4 +1,4 @@
-# MetQuest - For identifying favourable pathways to produce metabolite
+# MetQuest - For identifying efficient pathways to produce metabolites
 
 Setup
 =====

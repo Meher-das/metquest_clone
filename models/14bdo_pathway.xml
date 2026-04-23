@@ -1,0 +1,71 @@
+<sbml>
+  <model id="Synthetic_14BDO_Pathway">
+    <listOfReactions>
+      <reaction id="EX_succoa_c" reversible="true"/>
+      <reaction id="EX_atp_c" reversible="true"/>
+      <reaction id="EX_nadph_c" reversible="true"/>
+      <reaction id="EX_coa_c" reversible="true"/>
+      <reaction id="EX_h_c" reversible="true"/>
+      <reaction id="EX_14bdo_c" reversible="true"/>
+
+      <reaction id="SUCDi" reversible="false">
+        <listOfReactants>
+          <speciesReference species="succoa_c" stoichiometry="1"/>
+          <speciesReference species="nadph_c" stoichiometry="1"/>
+          <speciesReference species="h_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="sucsal_c" stoichiometry="1"/>
+          <speciesReference species="nadp_c" stoichiometry="1"/>
+          <speciesReference species="coa_c" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="4HBDH" reversible="false">
+        <listOfReactants>
+          <speciesReference species="sucsal_c" stoichiometry="1"/>
+          <speciesReference species="nadph_c" stoichiometry="1"/>
+          <speciesReference species="h_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="4hb_c" stoichiometry="1"/>
+          <speciesReference species="nadp_c" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="4HBT" reversible="false">
+        <listOfReactants>
+          <speciesReference species="4hb_c" stoichiometry="1"/>
+          <speciesReference species="atp_c" stoichiometry="1"/>
+          <speciesReference species="coa_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="4hbcoa_c" stoichiometry="1"/>
+          <speciesReference species="amp_c" stoichiometry="1"/>
+          <speciesReference species="ppi_c" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="ABAL" reversible="false">
+        <listOfReactants>
+          <speciesReference species="4hbcoa_c" stoichiometry="1"/>
+          <speciesReference species="nadph_c" stoichiometry="1"/>
+          <speciesReference species="h_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="4hbal_c" stoichiometry="1"/>
+          <speciesReference species="nadp_c" stoichiometry="1"/>
+          <speciesReference species="coa_c" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="14BDO_dh" reversible="false">
+        <listOfReactants>
+          <speciesReference species="4hbal_c" stoichiometry="1"/>
+          <speciesReference species="nadph_c" stoichiometry="1"/>
+          <speciesReference species="h_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="14bdo_c" stoichiometry="1"/>
+          <speciesReference species="nadp_c" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
