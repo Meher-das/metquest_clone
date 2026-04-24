@@ -503,6 +503,25 @@ def summarise_all(all_results):
             print(f"  {'  ' + name:<45} {reach:>10}  {str(n_path):>10}  {str(mlen):>7}")
     print()
 
+def run_knockout_study(base_G, seed_mets, target_node, knockout_rxns, cutoff, label=""):
+    """
+    Simulates a knockout by removing reaction nodes and checking reachability.
+    """
+    KO_G = base_G.copy()
+    
+    # Remove the specified reaction nodes
+    for rxn in knockout_rxns:
+        if rxn in KO_G:
+            KO_G.remove_node(rxn)
+            
+    # Run MetQuest on the crippled graph
+    pathway_table, _, scope = pathway_assembler.find_pathways(KO_G, seed_mets, cutoff)
+    
+    in_scope = target_node in scope
+    print(f"  [KO STUDY] {label}")
+    print(f"    Removed Reactions: {knockout_rxns}")
+    print(f"    Target Reachable: {'✓ YES' if in_scope else '✗ NO'}")
+    return in_scope
 
 def main():
     print_section("Loading iJO1366 base graph (MetQuest built-in)")
@@ -661,6 +680,39 @@ def main():
 
     print(f"\n  Base scope size (cutoff=10): {len(base_scope)} metabolites")
     print()
+    print_section("KNOCKOUT VALIDATION STUDIES")
+
+    # ---------------------------------------------------------
+    # STUDY 1: BDO - Testing Route A vs Route B redundancy
+    # ---------------------------------------------------------
+    print("\n--- Paper 1: BDO Redundancy Audit ---")
+    # Knockout Route B (SucA) - Target should still be reachable via Route A
+    run_knockout_study(
+        bdo_G, seed_bdo, bdo_targets["1,4-Butanediol (BDO) [TARGET]"],
+        knockout_rxns=["custom_SucA"],
+        cutoff=14,
+        label="Knocking out Route B (SucA)"
+    )
+
+    # Knockout Both Routes - Target should be NOT reachable
+    run_knockout_study(
+        bdo_G, seed_bdo, bdo_targets["1,4-Butanediol (BDO) [TARGET]"],
+        knockout_rxns=["custom_SucA", "custom_SucD"],
+        cutoff=14,
+        label="Knocking out BOTH entry routes (SucA & SucD)"
+    )
+
+    # ---------------------------------------------------------
+    # STUDY 2: Artemisinin - Testing "Missing Link" (ADH1/ALDH1)
+    # ---------------------------------------------------------
+    print("\n--- Paper 2: Artemisinin Topological Necessity ---")
+    # Knockout the 'rescue' enzymes added by Paddon et al.
+    run_knockout_study(
+        art_G, seed_art, art_targets["Artemisinic acid [TARGET]"],
+        knockout_rxns=["custom_ADH1_art", "custom_ALDH1"],
+        cutoff=16,
+        label="Removing Paddon's plant enzymes (ADH1/ALDH1)"
+    )
     return all_results
 
 
